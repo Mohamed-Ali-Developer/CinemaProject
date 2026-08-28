@@ -24,7 +24,7 @@ class AddMovieRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'poster' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'poster' => 'nullable|image|mimes:jpg,jpeg,png,webp,JFIF|max:2048',
             'duration' => 'required|integer|min:1',
             'release_date' => 'required|date',
             'description' => 'nullable|string',

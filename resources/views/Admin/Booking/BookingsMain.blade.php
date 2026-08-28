@@ -131,7 +131,7 @@
                 <tbody>
                     @forelse ($bookings as $booking)
                         <tr>
-                            <td><span class="booking-id">#BK{{ $booking->id }}</span></td>
+                            <td><span class="booking-id">{{ $booking->id }}</span></td>
                             
                             <td>
                                 <div class="customer-name">{{ $booking->user->name ?? 'N/A' }}</div>

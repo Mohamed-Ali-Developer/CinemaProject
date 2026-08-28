@@ -54,22 +54,23 @@ class AdminShowtimesController extends Controller
     }
 
      public function store(AddShowtimeRequest $request){
-        $validated = $request->validated();
         $showtime = Showtime::create([
-            'movie_id' => $validated['movie_id'],
-            'hall_id' => $validated['hall_id'],
-            'start_at' => $validated['start_date'] . ' ' . $validated['start_time'],
-            'end_at' => $validated['start_date'] . ' ' . $validated['end_time'],
+            'movie_id' => $request->movie_id,
+            'hall_id' => $request->hall_id,
+            'start_at' => $request->start_date . ' ' . $request->start_time,
+            'end_at' => $request->start_date . ' ' . $request->end_time,
         ]);
+
         TicketPrice::create([
             'show_time_id' => $showtime->id,
             'seat_type' => 'regular',
-            'price' => $validated['regular_price'],
+            'price' => $request->regular_price,
         ]);
+
         TicketPrice::create([
             'show_time_id' => $showtime->id,
             'seat_type' => 'vip',
-            'price' => $validated['vip_price'],
+            'price' => $request->vip_price,
         ]);
         return redirect()
             ->route('AdminShowtimes')
@@ -90,22 +91,23 @@ class AdminShowtimesController extends Controller
 
     public function update(AddShowtimeRequest $request, $id){
         $showtime = Showtime::findOrFail($id);
-        $validated = $request->validated();
         $showtime->update([
-            'movie_id' => $validated['movie_id'],
-            'hall_id' => $validated['hall_id'],
-            'start_at' => $validated['start_date'] . ' ' . $validated['start_time'],
-            'end_at' => $validated['start_date'] . ' ' . $validated['end_time'],
+            'movie_id' => $request->movie_id,
+            'hall_id' => $request->hall_id,
+            'start_at' => $request->start_date . ' ' . $request->start_time,
+            'end_at' => $request->start_date . ' ' . $request->end_time,
         ]);
+
         $showtime->ticketPrices()
             ->where('seat_type', 'regular')
             ->update([
-                'price' => $validated['regular_price'],
+                'price' => $request->regular_price,
             ]);
+
         $showtime->ticketPrices()
             ->where('seat_type', 'vip')
             ->update([
-                'price' => $validated['vip_price'],
+                'price' => $request->vip_price,
             ]);
         return redirect()
             ->route('AdminShowtimes')

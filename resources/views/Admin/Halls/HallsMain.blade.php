@@ -109,7 +109,7 @@
                     </div>
 
                     <div class="hall-actions">
-                        <a href="#">View</a>
+                        
                         <a href="{{ route('AdmineditHalls', $hall->id) }}">Edit</a>
 
                         <form

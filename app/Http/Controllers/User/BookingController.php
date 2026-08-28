@@ -32,11 +32,6 @@ class BookingController extends Controller
     }
 
     public function show(Hall $hall, ShowTime $showtime){
-        if ($showtime->hall_id !== $hall->id) {
-            return response()->json([
-                'message' => 'Showtime does not belong to this hall.'
-            ], 404);
-        }
 
         $showtime->bookings()
             ->where('status', 'pending')
@@ -44,26 +39,36 @@ class BookingController extends Controller
             ->update([
                 'status' => 'cancelled',
             ]);
+
         $seats = $hall->seats;
         $prices = $showtime->ticketPrices
             ->keyBy('seat_type');
-        $bookedSeatIds = $showtime->bookings()
+
+        $bookedSeatIds = [];
+
+        $bookings = $showtime->bookings()
             ->whereIn('status', ['pending', 'confirmed'])
             ->with('seats')
-            ->get()
-            ->flatMap(function ($booking) {
-                return $booking->seats->pluck('id');
-            })
-            ->unique();
+            ->get();
 
-        $seats->each(function ($seat) use ($prices, $bookedSeatIds) {
-            $seat->ticket_price =
-                $prices[$seat->type]->price ?? null;
-            $seat->booking_status =
-                $bookedSeatIds->contains($seat->id)
-                    ? 'booked'
-                    : 'available';
-        });
+            foreach ($bookings as $booking) {
+                foreach ($booking->seats as $seat) {
+                    if (!in_array($seat->id, $bookedSeatIds)) {
+                        $bookedSeatIds[] = $seat->id;
+                    }
+                }
+            }
+
+            foreach ($seats as $seat) {
+                $seat->ticket_price =
+                    $prices[$seat->type]->price ?? null;
+
+                $seat->booking_status =
+                    in_array($seat->id, $bookedSeatIds)
+                        ? 'booked'
+                        : 'available';
+            }
+        
         return SeatResource::collection($seats);
     }
 
@@ -74,23 +79,9 @@ class BookingController extends Controller
             'bookings.seats',
         ])->findOrFail($request->show_time_id);
 
-        $showtime->bookings()
-            ->where('status', 'pending')
-            ->where('created_at', '<=', now()->subMinutes(10))
-            ->update([
-                'status' => 'cancelled',
-            ]);
-
         $seats = Seat::whereIn('id', $request->seats)
             ->where('hall_id', $showtime->hall_id)
             ->get();
-
-        if ($seats->count() !== count($request->seats)) {
-
-            return response()->json([
-                'message' => 'One or more selected seats do not belong to this hall.'
-            ], 422);
-        }
 
         $unavailableSeats = $seats->where(
             'status',
@@ -100,19 +91,23 @@ class BookingController extends Controller
 
         if ($unavailableSeats->isNotEmpty()) {
             return response()->json([
-                'message' => 'One or more selected seats are not available.',
-                'seats' => $unavailableSeats->pluck('id')->values(),
+                'message' => 'One or more selected seats are not available.',ذ
             ], 422);
         }
 
-        $bookedSeatIds = $showtime->bookings()
+        $bookedSeatIds = [];
+        $bookings = $showtime->bookings()
             ->whereIn('status', ['pending', 'confirmed'])
             ->with('seats')
-            ->get()
-            ->flatMap(function ($booking) {
-                return $booking->seats->pluck('id');
-            })
-            ->unique();
+            ->get();
+
+        foreach ($bookings as $booking) {
+            foreach ($booking->seats as $seat) {
+                if (!in_array($seat->id, $bookedSeatIds)) {
+                    $bookedSeatIds[] = $seat->id;
+                }
+            }
+        }
         $alreadyBooked = $seats->whereIn(
             'id',
             $bookedSeatIds
@@ -120,7 +115,6 @@ class BookingController extends Controller
         if ($alreadyBooked->isNotEmpty()) {
             return response()->json([
                 'message' => 'One or more selected seats are already booked.',
-                'seats' => $alreadyBooked->pluck('id')->values(),
             ], 422);
         }
         $prices = $showtime->ticketPrices
@@ -145,9 +139,7 @@ class BookingController extends Controller
         ]);
 
         foreach ($seats as $seat) {
-
             $booking->seats()->attach($seat->id);
-
         }
 
         return response()->json([

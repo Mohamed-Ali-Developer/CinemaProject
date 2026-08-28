@@ -19,7 +19,7 @@ Route::post('/Login',[LoginController::class,'update'])->name("UserLoggedin");
 Route::post('/Regester',[LoginController::class,'store'])->name("Regestrered");
 
 
-Route::middleware(['auth:sanctum', 'isAdmin:user'])->group(function () {
+Route::middleware(['auth:sanctum', 'Role:user'])->group(function () {
 
     Route::get('/Movies',[MoviesController::class,'index'])->name("UserMovies");
     Route::get('/Movies/{movie}',[MoviesController::class,'show'])->name("UserViewMovie");

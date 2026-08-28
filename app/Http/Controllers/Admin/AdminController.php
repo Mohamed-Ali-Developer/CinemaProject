@@ -60,7 +60,6 @@ class AdminController extends Controller
             'bookings.show_time_id'
         )
         ->select(
-            'movies.id',
             'movies.title'
         )
         ->selectRaw('COUNT(bookings.id) as bookings_count')
