@@ -342,7 +342,7 @@ Skills Demonstrated:
 ### Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone <https://github.com/Mohamed-Ali-Developer/CinemaProject>
 cd cinema-project
 ```
 
