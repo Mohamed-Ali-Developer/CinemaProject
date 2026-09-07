@@ -1,58 +1,445 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Cinema Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Project Overview
 
-## About Laravel
+Cinema Management System is a Laravel-based application that provides a complete cinema management solution through two separate interfaces:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Admin Dashboard built with Blade Templates.
+- RESTful API for end users and mobile applications.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The system allows administrators to manage movies, halls, showtimes, and bookings, while users can browse movies, create bookings, manage their watch list, and receive AI-powered recommendations.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Backend Architecture
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### MVC Architecture
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Organized using Laravel MVC pattern.
+- Clear separation between Models, Controllers, and Views.
+- Business logic separated from presentation layer.
+- Maintainable and scalable project structure.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Service Layer
 
-## Agentic Development
+- Dedicated service for AI integration.
+- Business logic isolated from controllers.
+- Improved code readability and maintainability.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Dependency Injection
+
+- Service injection through Laravel container.
+- Loose coupling between application components.
+- Improved maintainability and scalability.
+- Cleaner controller implementation.
+
+---
+
+## Authentication & Authorization
+
+### Session Authentication
+
+Used for the Admin Dashboard.
+
+- Secure login system for administrators.
+- Laravel session management.
+- Protected admin routes.
+- Session-based authentication workflow.
+
+### Token Authentication
+
+Used for API users through Laravel Sanctum.
+
+- API token generation.
+- Secure authenticated requests.
+- User logout and token revocation.
+- Stateless authentication for frontend and mobile applications.
+
+### Role Based Access Control
+
+- Admin role management.
+- User role management.
+- Middleware-based authorization.
+- Protected resources based on user permissions.
+
+---
+
+## REST API Development
+
+### API Design
+
+- RESTful endpoint structure.
+- Resource-oriented routes.
+- Proper HTTP methods usage.
+- Consistent API responses.
+
+### API Resources
+
+Used to standardize API output.
+
+- User Resource.
+- Movie Resource.
+- Booking Resource.
+- Showtime Resource.
+- Seat Resource.
+
+Benefits:
+
+- Clean JSON responses.
+- Controlled data exposure.
+- Consistent response formatting.
+
+---
+
+## Request Validation
+
+### Form Request Validation
+
+Dedicated Request classes used for validation.
+
+Examples:
+
+- Login Request.
+- Register Request.
+- Booking Request.
+- Movie Request.
+- Hall Request.
+- Showtime Request.
+- AI Request.
+
+Benefits:
+
+- Clean controllers.
+- Centralized validation logic.
+- Improved security and maintainability.
+
+---
+
+## Database Design
+
+### Relational Database Modeling
+
+Designed using relational database principles.
+
+Entities include:
+
+- Users
+- Movies
+- Halls
+- Showtimes
+- Bookings
+- Seats
+- Genres
+- Ticket Prices
+
+### Database Relationships
+
+Implemented using Eloquent ORM.
+
+Examples:
+
+- One To Many Relationships.
+- Many To Many Relationships.
+- Foreign Key Constraints.
+- Data Integrity Management.
+
+### Database Migrations
+
+- Version controlled schema management.
+- Reproducible database structure.
+- Easy deployment process.
+
+---
+
+## Eloquent ORM
+
+### Data Retrieval
+
+- find()
+- where()
+- first()
+- get()
+- eager loading
+
+### Data Manipulation
+
+- create()
+- update()
+- delete()
+
+### Query Optimization
+
+- Relationship loading.
+- Cleaner database interactions.
+- Reduced query complexity.
+
+---
+
+## Routing
+
+- Resource routes.
+- API routes.
+- Route groups.
+- Middleware-protected routes.
+- Organized route structure.
+
+---
+
+## Admin Dashboard
+
+### Movie Management
+
+- Add movies.
+- Edit movies.
+- Delete movies.
+- View movies.
+
+### Hall Management
+
+- Create halls.
+- Update hall information.
+- Remove halls.
+
+### Showtime Management
+
+- Create showtimes.
+- Edit showtimes.
+- Delete showtimes.
+
+### Booking Management
+
+- View bookings.
+- Manage booking records.
+
+---
+
+## User Features
+
+### Movie Browsing
+
+- View available movies.
+- View movie details.
+- Explore cinema content.
+
+### Watch List Management
+
+- Add movies to personal list.
+- Remove movies from watch list.
+- View saved movies.
+
+### Booking System
+
+- Select showtime.
+- Choose seats.
+- Create booking.
+- Confirm reservation.
+- Cancel booking.
+
+---
+
+## Middleware Implementation
+
+Custom middleware used for route protection.
+
+Responsibilities:
+
+- Authentication checks.
+- Role verification.
+- Access control enforcement.
+- Route security.
+
+---
+
+## AI Integration
+
+### Gemini Integration
+
+Implemented through a dedicated service layer.
+
+Features:
+
+- Movie recommendations.
+- AI-powered movie suggestions.
+- Movie-related chat functionality.
+
+Skills Demonstrated:
+
+- Third-party API integration.
+- Service abstraction.
+- External HTTP communication.
+- Structured AI response handling.
+
+---
+
+## File Handling
+
+### Media Uploads
+
+- Movie image uploads.
+- File validation.
+- Secure file storage.
+
+---
+
+## Security Practices
+
+### Authentication Security
+
+- Password hashing.
+- Protected routes.
+- Sanctum token security.
+- Session security.
+
+### Input Validation
+
+- Server-side validation.
+- Request sanitization.
+- Controlled user input.
+
+### Authorization
+
+- Role-based access control.
+- Protected administrative operations.
+
+---
+
+## Skills Demonstrated
+
+- Laravel Framework Development
+- RESTful API Development
+- MVC Architecture
+- Service Layer Pattern
+- Authentication & Authorization
+- Laravel Sanctum
+- Session-Based Authentication
+- Role Based Access Control (RBAC)
+- Middleware Development
+- Form Request Validation
+- API Resources
+- Eloquent ORM
+- Database Design & Relationships
+- Database Migrations
+- File Upload Management
+- AI API Integration
+- Dependency Injection
+- Route Management
+- CRUD Operations
+- JSON API Responses
+- MySQL Database Management
+- Software Engineering Best Practices
+
+---
+
+## Installation Guide
+
+### Prerequisites
+
+- PHP 8.3 or later
+- Composer
+- MySQL
+- Git
+
+### Clone Repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <repository-url>
+cd cinema-project
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Install Dependencies
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Environment Configuration
 
-## Code of Conduct
+Create a copy of the environment file:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+```
 
-## Security Vulnerabilities
+Update database credentials inside the ".env" file.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Generate Application Key
 
-## License
+```bash
+php artisan key\:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Run Database Migrations
+
+```bash
+php artisan migrate
+```
+
+### Start Development Server
+
+```bash
+php artisan serve
+```
+
+Application will be available at:
+
+http://127.0.0.1:8000
+
+---
+
+## Software Engineering Practices
+
+- Clean MVC Structure
+- Separation of Concerns
+- Reusable Components
+- Service-Oriented Design
+- Dependency Injection
+- Centralized Validation
+- Consistent API Response Structure
+- Maintainable Project Architecture
+- Scalable Code Organization
+
+---
+
+## Technologies Used
+
+### Backend
+
+- PHP 8.3
+- Laravel 13
+
+### Authentication
+
+- Laravel Sanctum
+- Session Authentication
+
+### Database
+
+- MySQL
+- Eloquent ORM
+- Database Migrations
+
+### API Development
+
+- REST API
+- JSON Resources
+
+### Frontend
+
+- Blade Templates
+
+### AI Integration
+
+- Gemini API
+
+### Development Concepts
+
+- MVC Architecture
+- Service Layer Pattern
+- Dependency Injection
+- Authentication & Authorization
+- Role Based Access Control
+- Middleware
+- Form Request Validation
+- Database Relationships
+- RESTful API Design
+- Secure File Handling
